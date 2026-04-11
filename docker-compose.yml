@@ -1,0 +1,20 @@
+version: '3'
+services:
+  authentication-service:
+    image: keycloak-auth-server:latest
+    container_name: keycloak-authentication-server
+    restart: unless-stopped
+    build: .
+    ports:
+      - "25011:25011"
+    networks:
+      - cf-network
+
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fs http://localhost:25011/openapi/swagger-ui.html || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  cf-network:
